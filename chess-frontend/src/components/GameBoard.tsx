@@ -56,7 +56,7 @@ const GameBoard = () => {
             const isHighlighted = highlightedMoves.some(m => m.x === currentPos.x && m.y === currentPos.y);
             return (
               <div key={`${rowIndex}-${colIndex}`}
-                   className={`w-16 h-16 flex items-center justify-center text-4xl cursor-pointer ${ (rowIndex + colIndex) % 2 === 0 ? "bg-slate-200" : "bg-green-700" }`}
+                   className={`w-16 h-16 flex items-center justify-center text-4xl cursor-pointer ${ (rowIndex + colIndex) % 2 === 0 ? "bg-black" : "bg-blue-800" }`}
                    onMouseDown={(e) => e.preventDefault()}
                    onClick={() => handleSquareClick(currentPos)}>
                 <div className="absolute">{piece && (piece.isWhite ? piece.symbolWhite : piece.symbolBlack)}</div>

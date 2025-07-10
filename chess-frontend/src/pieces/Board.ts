@@ -1,3 +1,4 @@
+import { Knight } from "./Knight";
 import { Pawn } from "./Pawn";
 import type { Piece, Position } from "./Piece";
 import { Rook } from "./Rook";
@@ -27,6 +28,11 @@ export class Board {
     this.grid[7][7] = new Rook({ x: 7, y : 7}, true);
     this.grid[0][0] = new Rook({ x: 0, y : 0}, false);
     this.grid[0][7] = new Rook({ x: 7, y : 0}, false);
+    //Knights
+    this.grid[7][1] = new Knight({ x: 1, y : 7}, true);
+    this.grid[7][6] = new Knight({ x: 6, y : 7}, true);
+    this.grid[0][1] = new Knight({ x: 1, y : 0}, false);
+    this.grid[0][6] = new Knight({ x: 6, y : 0}, false);
   }
 
   public getPieceAt(position: Position): Piece | null {
@@ -60,4 +66,9 @@ export class Board {
     }
     return newBoard;
   }
+
+  public squareInBound(position: Position) {
+    return position.x >= 0 && position.x < 8 && position.y >= 0 && position.y < 8;
+  }
+
 }
