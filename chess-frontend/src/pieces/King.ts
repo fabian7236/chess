@@ -1,7 +1,7 @@
 import { Board } from "./Board";
 import type { Piece, Position } from "./Piece";
 
-export class Rook implements Piece {
+export class King implements Piece {
     readonly value: number = 5;
     position: Position;
     isWhite: boolean;
@@ -15,8 +15,8 @@ export class Rook implements Piece {
         this.position = position;
         this.isWhite = isWhite;
         this.positionHistory = [position];
-        this.symbolWhite = "♖";
-        this.symbolBlack = "♜";
+        this.symbolWhite = "♔";
+        this.symbolBlack = "♚";
     }
 
     public move(newPosition: Position): boolean {
@@ -27,27 +27,14 @@ export class Rook implements Piece {
 
     public getValidMoves(board: Board): Position[] {
         const moves: Position[] = [];
-        let x = this.position.x
-        let y = this.position.y
-        // Check to right
-        while (this.pushMove(board, { x: x + 1, y: y }, moves)) {
-            x++
-        }
-        x = this.position.x
-        // Check to left
-        while (this.pushMove(board, { x: x + -1, y: y }, moves)) {
-            x--
-        }
-        x = this.position.x
-        // Check to Bottom
-        while (this.pushMove(board, { x: x, y: y + 1 }, moves)) {
-            y++
-        }
-        y = this.position.y
-        // Check to Top
-        while (this.pushMove(board, { x: x, y: y - 1 }, moves)) {
-            y--
-        }
+        this.pushMove(board, { x: this.position.x + 1, y: this.position.y + 1 }, moves)
+        this.pushMove(board, { x: this.position.x + 1, y: this.position.y - 1 }, moves)
+        this.pushMove(board, { x: this.position.x - 1, y: this.position.y + 1 }, moves)
+        this.pushMove(board, { x: this.position.x - 1, y: this.position.y - 1 }, moves)
+        this.pushMove(board, { x: this.position.x + 1, y: this.position.y }, moves)
+        this.pushMove(board, { x: this.position.x - 1, y: this.position.y }, moves)
+        this.pushMove(board, { x: this.position.x, y: this.position.y + 1 }, moves)
+        this.pushMove(board, { x: this.position.x, y: this.position.y - 1 }, moves)
         return moves;
     }
 
@@ -67,5 +54,5 @@ export class Rook implements Piece {
         }
     }
 
-    
+
 }

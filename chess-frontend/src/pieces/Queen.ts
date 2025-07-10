@@ -1,7 +1,7 @@
 import { Board } from "./Board";
 import type { Piece, Position } from "./Piece";
 
-export class Rook implements Piece {
+export class Queen implements Piece {
     readonly value: number = 5;
     position: Position;
     isWhite: boolean;
@@ -15,8 +15,8 @@ export class Rook implements Piece {
         this.position = position;
         this.isWhite = isWhite;
         this.positionHistory = [position];
-        this.symbolWhite = "♖";
-        this.symbolBlack = "♜";
+        this.symbolWhite = "♕";
+        this.symbolBlack = "♛";
     }
 
     public move(newPosition: Position): boolean {
@@ -47,6 +47,14 @@ export class Rook implements Piece {
         // Check to Top
         while (this.pushMove(board, { x: x, y: y - 1 }, moves)) {
             y--
+        }
+        // Do Bishop Moves
+        const modfiers: number[][] = [[1, 1], [-1, 1], [1, -1], [-1, -1]]
+        for (let modifier of modfiers) {
+            let i = 1;
+            while (this.pushMove(board, { x: this.position.x + i * modifier[0], y: this.position.y + i * modifier[1]}, moves)) {
+                i++
+            }
         }
         return moves;
     }

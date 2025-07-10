@@ -1,6 +1,9 @@
+import { Bishop } from "./Bishop";
+import { King, Kings } from "./King";
 import { Knight } from "./Knight";
 import { Pawn } from "./Pawn";
 import type { Piece, Position } from "./Piece";
+import { Queen } from "./Queen";
 import { Rook } from "./Rook";
 
 export class Board {  
@@ -28,11 +31,22 @@ export class Board {
     this.grid[7][7] = new Rook({ x: 7, y : 7}, true);
     this.grid[0][0] = new Rook({ x: 0, y : 0}, false);
     this.grid[0][7] = new Rook({ x: 7, y : 0}, false);
-    //Knights
+    // Knights
     this.grid[7][1] = new Knight({ x: 1, y : 7}, true);
     this.grid[7][6] = new Knight({ x: 6, y : 7}, true);
     this.grid[0][1] = new Knight({ x: 1, y : 0}, false);
     this.grid[0][6] = new Knight({ x: 6, y : 0}, false);
+    // Bishops
+    this.grid[7][2] = new Bishop({ x: 2, y : 7}, true);
+    this.grid[7][5] = new Bishop({ x: 5, y : 7}, true);
+    this.grid[0][2] = new Bishop({ x: 2, y : 0}, false);
+    this.grid[0][5] = new Bishop({ x: 5, y : 0}, false);
+    // Queens
+    this.grid[7][3] = new Queen({ x: 3, y : 7}, true);
+    this.grid[0][4] = new Queen({ x: 4, y : 0}, false); 
+    // Kings
+    this.grid[7][4] = new King({ x: 4, y : 7}, true);
+    this.grid[0][3] = new King({ x: 3, y : 0}, false); 
   }
 
   public getPieceAt(position: Position): Piece | null {
