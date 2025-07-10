@@ -25,7 +25,7 @@ export class Rook implements Piece {
         return true;
     }
 
-    public getValidMoves(board: Board): Position[] {
+    public calculateValidMoves(board: Board): Position[] {
         const moves: Position[] = [];
         let x = this.position.x
         let y = this.position.y

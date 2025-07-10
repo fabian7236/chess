@@ -25,7 +25,7 @@ export class Pawn implements Piece {
         return true;
     }
 
-    public getValidMoves(board: Board): Position[] {
+    public calculateValidMoves(board: Board): Position[] {
         const moves: Position[] = [];
         const direction = this.isWhite ? -1 : 1;
         const oneStep: Position = { x: this.position.x, y: this.position.y + direction };
@@ -37,7 +37,6 @@ export class Pawn implements Piece {
                 moves.push(twoSteps);
             }
         }
-
         const diagonalLeft: Position = { x: this.position.x-1, y: this.position.y + direction }
         const diagonalRight: Position = { x: this.position.x+1, y: this.position.y + direction }
 

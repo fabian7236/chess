@@ -1,5 +1,5 @@
 import { Bishop } from "./Bishop";
-import { King, Kings } from "./King";
+import { King } from "./King";
 import { Knight } from "./Knight";
 import { Pawn } from "./Pawn";
 import type { Piece, Position } from "./Piece";
@@ -9,6 +9,13 @@ import { Rook } from "./Rook";
 export class Board {  
 
   private grid: (Piece | null)[][];
+
+  public attackedByWhite: Position[] = []
+  public attackedByBlack: Position[] = []
+  private whiteKing: Piece | undefined;
+  private blackKing: Piece | undefined;
+
+  private whiteMoves: boolean = true;
 
   constructor() {
     this.grid = Array(8)
@@ -42,11 +49,32 @@ export class Board {
     this.grid[0][2] = new Bishop({ x: 2, y : 0}, false);
     this.grid[0][5] = new Bishop({ x: 5, y : 0}, false);
     // Queens
-    this.grid[7][3] = new Queen({ x: 3, y : 7}, true);
-    this.grid[0][4] = new Queen({ x: 4, y : 0}, false); 
+    this.grid[7][3] = new Queen({ x: 3, y: 7 }, true);
+    this.grid[0][3] = new Queen({ x: 3, y: 0 }, false);
     // Kings
-    this.grid[7][4] = new King({ x: 4, y : 7}, true);
-    this.grid[0][3] = new King({ x: 3, y : 0}, false); 
+    this.whiteKing = new King({ x: 4, y: 7 }, true);
+    this.blackKing = new King({ x: 4, y: 0 }, false);
+    this.grid[7][4] = this.whiteKing;
+    this.grid[0][4] = this.blackKing;
+
+    this.calculateAttackFields();
+  }
+
+  public calculateAttackFields() {
+    this.attackedByWhite = []
+    this.attackedByBlack = []
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (this.grid[i][j] != null) {
+          const piece = this.grid[i][j]
+          if (piece?.isWhite) {
+            piece.calculateValidMoves(this).forEach(position => this.attackedByWhite.push(position));
+          } else {
+            piece?.calculateValidMoves(this).forEach(position => this.attackedByBlack.push(position));
+          }
+        }
+      }      
+    }
   }
 
   public getPieceAt(position: Position): Piece | null {
@@ -78,11 +106,19 @@ export class Board {
       newBoard.grid[to.y][to.x] = piece;
       newBoard.grid[from.y][from.x] = null;
     }
+    newBoard.calculateAttackFields()
+    newBoard.whiteMoves = !this.whiteMoves
     return newBoard;
   }
+
+    public isWhiteTurn() {
+      return this.whiteMoves;
+    }
+
 
   public squareInBound(position: Position) {
     return position.x >= 0 && position.x < 8 && position.y >= 0 && position.y < 8;
   }
+
 
 }

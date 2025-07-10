@@ -2,13 +2,14 @@ import { Board } from "./Board";
 import type { Piece, Position } from "./Piece";
 
 export class Queen implements Piece {
-    readonly value: number = 5;
+    readonly value: number = 9;
     position: Position;
     isWhite: boolean;
     isAlive: boolean = true;
     positionHistory: Position[];
     symbolWhite: string;
     symbolBlack: string;
+
 
 
     constructor(position: Position, isWhite: boolean) {
@@ -25,7 +26,7 @@ export class Queen implements Piece {
         return true;
     }
 
-    public getValidMoves(board: Board): Position[] {
+    public calculateValidMoves(board: Board): Position[] {
         const moves: Position[] = [];
         let x = this.position.x
         let y = this.position.y

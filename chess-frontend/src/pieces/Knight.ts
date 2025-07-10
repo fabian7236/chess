@@ -25,7 +25,7 @@ export class Knight implements Piece {
         return true;
     }
 
-    public getValidMoves(board: Board): Position[] {
+    public calculateValidMoves(board: Board): Position[] {
         const moves: Position[] = [];
         this.pushMove(board, {x: this.position.x+2, y: this.position.y+1}, moves)
         this.pushMove(board, {x: this.position.x+2, y: this.position.y-1}, moves)

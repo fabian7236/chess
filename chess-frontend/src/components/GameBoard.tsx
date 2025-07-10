@@ -20,7 +20,7 @@ const GameBoard = () => {
 
     if (selectedPiece) {
       const isMoveValid = highlightedMoves.some(m => m.x === clickedPosition.x && m.y === clickedPosition.y);
-      
+
       if (isMoveValid) {
         const newBoardState = board.movePiece(selectedPiecePosition!, clickedPosition);
         setBoard(newBoardState);
@@ -31,7 +31,7 @@ const GameBoard = () => {
 
       if (clickedPiece && clickedPiece.isWhite === selectedPiece.isWhite) {
         setSelectedPiecePosition(clickedPosition);
-        setHighlightedMoves(clickedPiece.getValidMoves(board));
+        setHighlightedMoves(clickedPiece.calculateValidMoves(board));
         return;
       }
 
@@ -39,9 +39,9 @@ const GameBoard = () => {
       setHighlightedMoves([]);
 
     } else if (clickedPiece) {
-      if (true) {
+      if (clickedPiece.isWhite === board.isWhiteTurn()) {
         setSelectedPiecePosition(clickedPosition);
-        const validMoves = clickedPiece.getValidMoves(board);
+        const validMoves = clickedPiece.calculateValidMoves(board);
         setHighlightedMoves(validMoves);
       }
     }
@@ -56,11 +56,10 @@ const GameBoard = () => {
             const isHighlighted = highlightedMoves.some(m => m.x === currentPos.x && m.y === currentPos.y);
             return (
               <div key={`${rowIndex}-${colIndex}`}
-                   className={`w-16 h-16 flex items-center justify-center text-4xl cursor-pointer ${ (rowIndex + colIndex) % 2 === 0 ? "bg-black" : "bg-blue-800" }`}
-                   onMouseDown={(e) => e.preventDefault()}
-                   onClick={() => handleSquareClick(currentPos)}>
+                className={`w-16 h-16 flex items-center justify-center text-4xl cursor-pointer ${(rowIndex + colIndex) % 2 === 0 ? "bg-black" : "bg-blue-800"}`}
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => handleSquareClick(currentPos)}>
                 <div className="absolute">{piece && (piece.isWhite ? piece.symbolWhite : piece.symbolBlack)}</div>
-                <div className="absolute text-black text-lg">{currentPos.x + "/" + currentPos.y}</div>
                 <div className="absolute">{isHighlighted ? "◯" : ""}</div>
               </div>
             );

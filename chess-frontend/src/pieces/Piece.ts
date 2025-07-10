@@ -9,7 +9,7 @@ export interface Piece {
     symbolWhite: string
     symbolBlack: string
     move(newPosition: Position): boolean
-    getValidMoves(board: Board): Position[];
+    calculateValidMoves(board: Board): Position[];
 }
 
 export interface Position {

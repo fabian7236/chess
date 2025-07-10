@@ -25,7 +25,7 @@ export class Bishop implements Piece {
         return true;
     }
 
-    public getValidMoves(board: Board): Position[] {
+    public calculateValidMoves(board: Board): Position[] {
         const moves: Position[] = [];
         const modfiers: number[][] = [[1, 1], [-1, 1], [1, -1], [-1, -1]]
         for (let modifier of modfiers) {
