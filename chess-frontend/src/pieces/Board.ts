@@ -1,5 +1,6 @@
 import { Pawn } from "./Pawn";
 import type { Piece, Position } from "./Piece";
+import { Rook } from "./Rook";
 
 export class Board {  
 
@@ -16,10 +17,16 @@ export class Board {
   }
 
   public initBoard(): void {
+    // Pawns
     for (let i = 0; i < 8; i++) {
       this.grid[6][i] = new Pawn({ x: i, y: 6 }, true);
       this.grid[1][i] = new Pawn({ x: i, y: 1 }, false); 
     }
+    // Rooks
+    this.grid[7][0] = new Rook({ x: 0, y : 7}, true);
+    this.grid[7][7] = new Rook({ x: 7, y : 7}, true);
+    this.grid[0][0] = new Rook({ x: 0, y : 0}, false);
+    this.grid[0][7] = new Rook({ x: 7, y : 0}, false);
   }
 
   public getPieceAt(position: Position): Piece | null {
@@ -37,7 +44,6 @@ export class Board {
     const newBoard = new Board();
     newBoard.grid = this.grid.map(row => {
       return row.map(piece => {
-        // If there's a piece, create a new instance of it to avoid mutation
         return piece ? Object.create(Object.getPrototypeOf(piece), Object.getOwnPropertyDescriptors(piece)) : null;
       });
     });
@@ -48,7 +54,7 @@ export class Board {
     const newBoard = this.clone();
     const piece = newBoard.getPieceAt(from);
     if (piece) {
-      piece.move(to); // Update the piece's internal state
+      piece.move(to);
       newBoard.grid[to.y][to.x] = piece;
       newBoard.grid[from.y][from.x] = null;
     }

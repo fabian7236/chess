@@ -38,7 +38,6 @@ export class Pawn implements Piece {
             }
         }
 
-        // Capture logic
         const diagonalLeft: Position = { x: this.position.x-1, y: this.position.y + direction }
         const diagonalRight: Position = { x: this.position.x+1, y: this.position.y + direction }
 

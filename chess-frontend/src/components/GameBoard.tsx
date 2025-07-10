@@ -60,6 +60,7 @@ const GameBoard = () => {
                    onMouseDown={(e) => e.preventDefault()}
                    onClick={() => handleSquareClick(currentPos)}>
                 <div className="absolute">{piece && (piece.isWhite ? piece.symbolWhite : piece.symbolBlack)}</div>
+                <div className="absolute text-black text-lg">{currentPos.x + "/" + currentPos.y}</div>
                 <div className="absolute">{isHighlighted ? "◯" : ""}</div>
               </div>
             );
