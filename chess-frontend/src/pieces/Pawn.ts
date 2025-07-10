@@ -1,31 +1,55 @@
+import { Board } from "./Board";
 import type { Piece, Position } from "./Piece";
 
 export class Pawn implements Piece {
-    value: number;
+    readonly value: number = 1;
     position: Position;
     isWhite: boolean;
-    isAlive: boolean;
+    isAlive: boolean = true;
     positionHistory: Position[];
-    possibleMoves: Position[];
+    symbolWhite: string;
+    symbolBlack: string;
 
-    constructor(value: number, position: Position, isWhite: boolean, isAlive: boolean) {
-        this.value = value;
+
+    constructor(position: Position, isWhite: boolean) {
         this.position = position;
         this.isWhite = isWhite;
-        this.isAlive = isAlive;
-        this.positionHistory = []
-        this.possibleMoves = [{x: position.x, y: position.y+1},{x: position.x, y: position.y+2}];
+        this.positionHistory = [position];
+        this.symbolWhite = "♙";
+        this.symbolBlack = "♟";
     }
 
     public move(newPosition: Position): boolean {
-        return true
+        this.position = newPosition;
+        this.positionHistory.push(newPosition);
+        return true;
     }
 
-    private findPossibleMoves(position: Position): Position[] {
-        
-        return []
+    public getValidMoves(board: Board): Position[] {
+        const moves: Position[] = [];
+        const direction = this.isWhite ? -1 : 1;
+        const oneStep: Position = { x: this.position.x, y: this.position.y + direction };
+        if (!board.isFieldOccupied(oneStep)) {
+            moves.push(oneStep);
+            const isAtStart = (this.isWhite && this.position.y === 6) || (!this.isWhite && this.position.y === 1);
+            const twoSteps: Position = { x: this.position.x, y: this.position.y + 2 * direction };
+            if (isAtStart && !board.isFieldOccupied(twoSteps)) {
+                moves.push(twoSteps);
+            }
+        }
+
+        // Capture logic
+        const diagonalLeft: Position = { x: this.position.x-1, y: this.position.y + direction }
+        const diagonalRight: Position = { x: this.position.x+1, y: this.position.y + direction }
+
+        const checkCapture = (targetPos: Position) => {
+            const targetPiece = board.getPieceAt(targetPos);
+            if (targetPiece && targetPiece.isWhite !== this.isWhite) {
+                moves.push(targetPos);
+            }
+        };
+        checkCapture(diagonalLeft);
+        checkCapture(diagonalRight);
+        return moves;
     }
-
-    
-
 }

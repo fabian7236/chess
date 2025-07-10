@@ -5,6 +5,8 @@ import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <div className="flex justify-center items-center m-auto w-screen h-screen" onMouseDown={(e) => e.preventDefault()}>
+      <App />
+    </div>
   </StrictMode>,
 )
