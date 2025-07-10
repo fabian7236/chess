@@ -10,6 +10,7 @@ export interface Piece {
     symbolBlack: string
     move(newPosition: Position): boolean
     calculateValidMoves(board: Board): Position[];
+    getAttackedSquares(board: Board): Position[];
 }
 
 export interface Position {

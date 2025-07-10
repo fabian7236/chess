@@ -25,31 +25,38 @@ export class Knight implements Piece {
         return true;
     }
 
-    public calculateValidMoves(board: Board): Position[] {
-        const moves: Position[] = [];
-        this.pushMove(board, {x: this.position.x+2, y: this.position.y+1}, moves)
-        this.pushMove(board, {x: this.position.x+2, y: this.position.y-1}, moves)
-        this.pushMove(board, {x: this.position.x+1, y: this.position.y+2}, moves)
-        this.pushMove(board, {x: this.position.x+1, y: this.position.y-2}, moves)
-        this.pushMove(board, {x: this.position.x-1, y: this.position.y+2}, moves)
-        this.pushMove(board, {x: this.position.x-1, y: this.position.y-2}, moves)
-        this.pushMove(board, {x: this.position.x-2, y: this.position.y+1}, moves)
-        this.pushMove(board, {x: this.position.x-2, y: this.position.y-1}, moves)
-        return moves;
+    public getAttackedSquares(board: Board): Position[] {
+        return this.calculateMoves(board, true);
     }
 
-    private pushMove(board: Board, nextPosition: Position, moves: Position[]) {
+    public calculateValidMoves(board: Board): Position[] {
+        return this.calculateMoves(board, false).filter(move => board.isMoveLegal(this.position, move));
+    }
+
+    private calculateMoves(board: Board, includeOwn: boolean): Position[] {
+        const moves: Position[] = [];
+        this.pushMove(board, {x: this.position.x+2, y: this.position.y+1}, moves, includeOwn)
+        this.pushMove(board, {x: this.position.x+2, y: this.position.y-1}, moves, includeOwn)
+        this.pushMove(board, {x: this.position.x+1, y: this.position.y+2}, moves, includeOwn)
+        this.pushMove(board, {x: this.position.x+1, y: this.position.y-2}, moves, includeOwn)
+        this.pushMove(board, {x: this.position.x-1, y: this.position.y+2}, moves, includeOwn)
+        this.pushMove(board, {x: this.position.x-1, y: this.position.y-2}, moves, includeOwn)
+        this.pushMove(board, {x: this.position.x-2, y: this.position.y+1}, moves, includeOwn)
+        this.pushMove(board, {x: this.position.x-2, y: this.position.y-1}, moves, includeOwn)
+        return moves
+    }
+
+    private pushMove(board: Board, nextPosition: Position, moves: Position[], includeOwn: boolean) {
         if (!board.squareInBound(nextPosition)) {
             return
         }
         let nextSquare = board.getPieceAt(nextPosition)
         if (nextSquare != null) {
-            if (this.isWhite != nextSquare.isWhite) {
+            if (this.isWhite != nextSquare.isWhite || includeOwn) {
                 moves.push(nextPosition)
             }
         } else {
             moves.push(nextPosition)
         }
     }
-
 }

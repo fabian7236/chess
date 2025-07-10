@@ -68,9 +68,9 @@ export class Board {
         if (this.grid[i][j] != null) {
           const piece = this.grid[i][j]
           if (piece?.isWhite) {
-            piece.calculateValidMoves(this).forEach(position => this.attackedByWhite.push(position));
+            piece.getAttackedSquares(this).forEach(position => this.attackedByWhite.push(position));
           } else {
-            piece?.calculateValidMoves(this).forEach(position => this.attackedByBlack.push(position));
+            piece?.getAttackedSquares(this).forEach(position => this.attackedByBlack.push(position));
           }
         }
       }      
@@ -92,9 +92,20 @@ export class Board {
     const newBoard = new Board();
     newBoard.grid = this.grid.map(row => {
       return row.map(piece => {
-        return piece ? Object.create(Object.getPrototypeOf(piece), Object.getOwnPropertyDescriptors(piece)) : null;
+        if (piece) {
+          const newPiece = Object.create(Object.getPrototypeOf(piece));
+          Object.assign(newPiece, piece);
+          return newPiece;
+        }
+        return null;
       });
     });
+    newBoard.whiteKing = this.whiteKing ? newBoard.getPieceAt(this.whiteKing.position)! : undefined;
+    newBoard.blackKing = this.blackKing ? newBoard.getPieceAt(this.blackKing.position)! : undefined;
+    newBoard.whiteMoves = this.whiteMoves;
+    // Deep copy the attack arrays
+    newBoard.attackedByWhite = this.attackedByWhite.map(p => ({...p}));
+    newBoard.attackedByBlack = this.attackedByBlack.map(p => ({...p}));
     return newBoard;
   }
 
@@ -106,8 +117,8 @@ export class Board {
       newBoard.grid[to.y][to.x] = piece;
       newBoard.grid[from.y][from.x] = null;
     }
-    newBoard.calculateAttackFields()
-    newBoard.whiteMoves = !this.whiteMoves
+    newBoard.calculateAttackFields();
+    newBoard.whiteMoves = !this.whiteMoves;
     return newBoard;
   }
 
@@ -115,6 +126,32 @@ export class Board {
       return this.whiteMoves;
     }
 
+  public isKingInCheck(isWhite: boolean): boolean {
+    const king = isWhite ? this.whiteKing : this.blackKing;
+    if (!king) return false;
+    const opponentAttacks = isWhite ? this.attackedByBlack : this.attackedByWhite;
+    return opponentAttacks.some(pos => pos.x === king.position.x && pos.y === king.position.y);
+  }
+
+  public isMoveLegal(from: Position, to: Position): boolean {
+    const piece = this.getPieceAt(from);
+    if (!piece) return false;
+
+    const tempBoard = this.clone();
+    const pieceOnTemp = tempBoard.getPieceAt(from)!;
+
+    pieceOnTemp.move(to);
+    tempBoard.grid[to.y][to.x] = pieceOnTemp;
+    tempBoard.grid[from.y][from.x] = null;
+
+    if (pieceOnTemp.value === 0) {
+        if(pieceOnTemp.isWhite) tempBoard.whiteKing = pieceOnTemp;
+        else tempBoard.blackKing = pieceOnTemp;
+    }
+
+    tempBoard.calculateAttackFields();
+    return !tempBoard.isKingInCheck(piece.isWhite);
+  }
 
   public squareInBound(position: Position) {
     return position.x >= 0 && position.x < 8 && position.y >= 0 && position.y < 8;

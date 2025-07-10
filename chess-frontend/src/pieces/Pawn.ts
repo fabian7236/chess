@@ -48,6 +48,14 @@ export class Pawn implements Piece {
         };
         checkCapture(diagonalLeft);
         checkCapture(diagonalRight);
-        return moves;
+        return moves.filter(move => board.isMoveLegal(this.position, move));
+    }
+
+    public getAttackedSquares(board: Board): Position[] {
+        const direction = this.isWhite ? -1 : 1;
+        const diagonalLeft: Position = { x: this.position.x - 1, y: this.position.y + direction };
+        const diagonalRight: Position = { x: this.position.x + 1, y: this.position.y + direction };
+
+        return [diagonalLeft, diagonalRight].filter(pos => board.squareInBound(pos));
     }
 }

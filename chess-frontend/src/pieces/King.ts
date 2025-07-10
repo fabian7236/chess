@@ -26,21 +26,8 @@ export class King implements Piece {
     }
 
     public calculateValidMoves(board: Board): Position[] {
-        const moves: Position[] = [];
-        this.pushMove(board, { x: this.position.x + 1, y: this.position.y + 1 }, moves)
-        this.pushMove(board, { x: this.position.x + 1, y: this.position.y - 1 }, moves)
-        this.pushMove(board, { x: this.position.x - 1, y: this.position.y + 1 }, moves)
-        this.pushMove(board, { x: this.position.x - 1, y: this.position.y - 1 }, moves)
-        this.pushMove(board, { x: this.position.x + 1, y: this.position.y }, moves)
-        this.pushMove(board, { x: this.position.x - 1, y: this.position.y }, moves)
-        this.pushMove(board, { x: this.position.x, y: this.position.y + 1 }, moves)
-        this.pushMove(board, { x: this.position.x, y: this.position.y - 1 }, moves)
-
-        const attackedByOpponent = this.isWhite ? board.attackedByBlack : board.attackedByWhite;
-
-        const legalMoves = moves.filter(move => 
-            !attackedByOpponent.some(attackedPos => attackedPos.x === move.x && attackedPos.y === move.y));
-        return legalMoves;
+        const pseudoMoves: Position[] = this.getAttackedSquares(board)
+        return pseudoMoves.filter(move => board.isMoveLegal(this.position, move));
     }
 
     private pushMove(board: Board, nextPosition: Position, moves: Position[]) {
@@ -59,5 +46,16 @@ export class King implements Piece {
         }
     }
 
-
+    public getAttackedSquares(board: Board): Position[] {
+        const moves: Position[] = [];
+        this.pushMove(board, { x: this.position.x + 1, y: this.position.y + 1 }, moves);
+        this.pushMove(board, { x: this.position.x + 1, y: this.position.y - 1 }, moves);
+        this.pushMove(board, { x: this.position.x - 1, y: this.position.y + 1 }, moves);
+        this.pushMove(board, { x: this.position.x - 1, y: this.position.y - 1 }, moves);
+        this.pushMove(board, { x: this.position.x + 1, y: this.position.y }, moves);
+        this.pushMove(board, { x: this.position.x - 1, y: this.position.y }, moves);
+        this.pushMove(board, { x: this.position.x, y: this.position.y + 1 }, moves);
+        this.pushMove(board, { x: this.position.x, y: this.position.y - 1 }, moves);
+        return moves;
+    }
 }
