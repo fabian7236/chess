@@ -1,69 +1,31 @@
-# React + TypeScript + Vite
+# Architecture
+- GameBoard.tsx is used to display everything and displays the state of Board.ts
+- Board.ts implements Game logic and handles moves
+- The is a Piece interface which all Pieces implement.
+- Each Piece handles individual move logic
+- Board handles a lot of King Logic which could be improved
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Features
+- All Pieces move according to rules
+- Pieces can capture enemy pieces
+- Legal moves are displayed
+- Pieces cannot move when pinned to King
+- King cannot move to Pieces which are attacked
+- Detection for Checkmate and Stalemate.
+- Castling with check if one of castle squares is attacked
+- Pawn promotes to queen
+- Support for both dark and white mode
+- Support Rotating Field
 
-Currently, two official plugins are available:
+# Missing Features
+- User cannot choose a piece when promoting a pawn. Instead always gets a Queen
+- En passant not implemented
+- No visualisation of captured pieces
+- No logic to check if checkmate is theoretically possible
+- Not possible to go one move back, pieces already track past positions internally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+# Potential Further Development
+- Implement Missing Features
+- Add Support so one player moves with Rest API
+- This would allow multiplayer (Implement with Web Socket)
+- This would allow creation of chess computer to play against

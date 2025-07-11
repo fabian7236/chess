@@ -9,6 +9,7 @@ export class Rook implements Piece {
     positionHistory: Position[];
     symbolWhite: string;
     symbolBlack: string;
+    hasMoved: boolean = false;
 
     constructor(position: Position, isWhite: boolean) {
         this.position = position;
@@ -21,6 +22,7 @@ export class Rook implements Piece {
     public move(newPosition: Position): boolean {
         this.position = newPosition;
         this.positionHistory.push(newPosition);
+        this.hasMoved = true;
         return true;
     }
 
